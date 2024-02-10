@@ -11,7 +11,7 @@ let smartphone = new Schema({
     paidBy: String,
     paidTo: String,
     paidDate : Date,
-    month: String,
+    month: Object,
     comment: String
 });
 
