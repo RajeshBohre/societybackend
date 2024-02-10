@@ -10,8 +10,8 @@ var multer = require('multer');
 const { default: mongoose } = require('mongoose');
 const { type } = require('os');
 const upload = multer({ dest: "uploads/" });
-const DB = "mongodb://localhost:27017/society"
-//const DB = "mongodb+srv://rajeshkh76:rajesh@cluster0.2e8kjso.mongodb.net/society?retryWrites=true&w=majority"
+//const DB = "mongodb://localhost:27017/society"
+const DB = "mongodb+srv://rajeshkh76:rajesh@cluster0.2e8kjso.mongodb.net/society?retryWrites=true&w=majority"
 var db = mongo.connect(DB, function(err, response){
 if(err){ console.log( err); }
 else{ console.log('Connected to ' + db, ' + ', response); }});
