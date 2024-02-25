@@ -54,6 +54,7 @@ email: { type: String },
 phoneNo: { type: String },
 },{ versionKey: false });
 var backlogSchema = new Schema({
+
     name: { type: String },
     flatNo: { type: String },
     amount: { type: Number },
@@ -61,28 +62,49 @@ var backlogSchema = new Schema({
     comment: { type: String },
 },{ versionKey: false });
 var backlogModel = mongo.model('backlog', backlogSchema, 'backlog');
-cron.schedule("*/35 * * * * *", function () {
-    console.log("---------------------");
-    console.log("running a task every 15 seconds");
-    backlogModel.find({},function(err,data){
-        //console.log("backlog data" , data)
-            data.forEach(item => {
-                
-                //item.amount = item.amount + Number(amount);
-                console.log(Number(item.amount) + Number(2000))
-            })
-            
+app.post("/api/getBacklogByFlat", function(req, res){
+    const condition = {"flatNo": req.body.flatNo}    
+    backlogModel.find(condition,function(err,data){
+    if(err){
+    res.send(err);
+    }else{
+    res.send(data);
+    }});
 })
-    
-        
-        
-        // var mod = new backlogModel(data);
-        // mod.save(function(err,data){
-        //     console.log("data sent to DB");
-        // });
-    
-        
-});
+app.patch("/api/updateBacklog",function(req,res){
+    backlogModel.findByIdAndUpdate(req.body._id, { 
+        _id: req.body._id,
+        name: req.body.name,
+        flatNo: String(req.body.flatNo),
+        amount: req.body.amount,
+        month: req.body.month,
+        comment: req.body.comment,
+},
+    function(err,data) {
+    if (err) {
+    res.send(err);
+    }else{
+    res.send({data:"Record has been Updated..!!"});
+    }});
+})
+cron.schedule("* * * 1 * *", function () {
+    backlogModel.find({},function(err,data){
+        data.forEach(item => {
+            if(item.flatNo == "17") {
+                item.amount = item.amount - Number(34000);
+            } else {
+                item.amount = item.amount - Number(2000);
+            }
+            var myquery = { flatNo: item.flatNo };
+            var newvalues = { $set: {amount: item.amount} };
+            backlogModel.updateOne(myquery, newvalues, function(err, res) {
+                if (err) throw err;
+                console.log("1 document updated");
+            });
+        })
+    })
+})
+
 app.get("/api/getBacklog",function(req,res){backlogModel.find({},function(err,data){
     if(err){
     res.send(err);
