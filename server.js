@@ -87,23 +87,23 @@ app.patch("/api/updateBacklog",function(req,res){
     res.send({data:"Record has been Updated..!!"});
     }});
 })
-cron.schedule("* * * 1 * *", function () {
-    backlogModel.find({},function(err,data){
-        data.forEach(item => {
-            if(item.flatNo == "17") {
-                item.amount = item.amount - Number(34000);
-            } else {
-                item.amount = item.amount - Number(2000);
-            }
-            var myquery = { flatNo: item.flatNo };
-            var newvalues = { $set: {amount: item.amount} };
-            backlogModel.updateOne(myquery, newvalues, function(err, res) {
-                if (err) throw err;
-                console.log("1 document updated");
-            });
-        })
-    })
-})
+// cron.schedule("40 9 * * *", function () {
+//     backlogModel.find({},function(err,data){
+//         data.forEach(item => {
+//             if(item.flatNo == "17") {
+//                 item.amount = item.amount + Number(34000);
+//             } else {
+//                 item.amount = item.amount + Number(2000);
+//             }
+//             var myquery = { flatNo: item.flatNo };
+//             var newvalues = { $set: {amount: item.amount} };
+//             backlogModel.updateOne(myquery, newvalues, function(err, res) {
+//                 if (err) throw err;
+//                 console.log("1 document updated");
+//             });
+//         })
+//     })
+// })
 
 app.get("/api/getBacklog",function(req,res){backlogModel.find({},function(err,data){
     if(err){
